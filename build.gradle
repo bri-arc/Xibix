@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'io.quarkus'
+    id 'eclipse'
+}
+
+wrapper {
+    gradleVersion = '6.9'
+}
+
+
+repositories {
+     mavenLocal()
+     mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'io.quarkus'
+apply plugin: 'eclipse' 
+
+group 'de.bri.codingchallange'
+version '1.0.0'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Class-Path': '/libs/CodingChallange.jar'
+        attributes 'Main-Class': 'de.bri.codingchallange.Main'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}    
+
+dependencies {
+    implementation 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    implementation 'io.quarkus:quarkus-jsonb'
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    //implementation 'io.quarkus:quarkus-amazon-lambda'
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+}
+
+
+
